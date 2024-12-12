@@ -1,0 +1,40 @@
+ 
+version: '3.8'
+
+networks:
+  backend_network:
+    driver: bridge
+
+services:
+  exam-service:
+    build:
+      context: ./doctor-service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    networks:
+      - backend_network
+    volumes:
+      - ./doctor-service:/app
+
+  patient-service:
+    build:
+      context: ./patient-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    networks:
+      - backend_network
+    volumes:
+      - ./patient-service:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - backend_network
+    volumes:
+      - ./frontend:/app
